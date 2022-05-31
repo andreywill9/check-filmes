@@ -2,6 +2,6 @@ package dev.andrey.checkfilmes.domain
 
 import java.util.Date
 
-class Filme(val id: Long, val titulo: String, val ano: Int, val diretor: String,
-            val elenco: List<String>, val notaImdb: Double, val notaUsuario: Double,
-            val foiAssistido: Boolean, val dataAssistido: Date) { }
+class Filme(val id: Long? = null, val titulo: String, val ano: Int? = null, val diretor: String? = null,
+            val elenco: List<String>? = null, val notaImdb: Double? = null, val notaUsuario: Double? = null,
+            val foiAssistido: Boolean = false, val dataAssistido: Date? = null)

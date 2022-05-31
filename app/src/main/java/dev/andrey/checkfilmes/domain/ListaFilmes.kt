@@ -3,7 +3,7 @@ package dev.andrey.checkfilmes.domain
 class ListaFilmes {
     private val filmes = mutableListOf<Filme>()
 
-    val ultimoId get() = filmes.map(Filme::id).maxOrNull()
+    val ultimoId get() = filmes.map { it.id!!} .maxOrNull()
 
     val todosFilmes get() = filmes.toList()
 
