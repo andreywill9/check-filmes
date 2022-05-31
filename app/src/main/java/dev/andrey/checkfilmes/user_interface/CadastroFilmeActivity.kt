@@ -1,6 +1,5 @@
 package dev.andrey.checkfilmes.user_interface
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View

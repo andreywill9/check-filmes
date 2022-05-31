@@ -4,7 +4,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.database.getDoubleOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import dev.andrey.checkfilmes.domain.Filme
+import java.util.*
 
 private val CREATE_FILME = "create table filme\n" +
         "(\n" +
@@ -27,11 +31,6 @@ private val CREATE_ELENCO = "create table elenco_filme\n" +
         "    id_filme INTEGER not null,\n" +
         "    ator     text    not null\n" +
         ")"
-
-private val INSERT_FILME = "insert into filme(titulo, ano, diretor, nota_imdb, nota_usuario, assistido, data_assistido) " +
-        "values (?, ?, ?, ?, ?, ?, ?)"
-
-private val INSERT_ELENCO = "insert into elenco_filme(id_filme, ator) values (?, ?)"
 
 class FilmeSqliteOpenHelper(context: Context): SQLiteOpenHelper(context, "filmes.db", null, DATABASE_VERSION) {
 
@@ -66,6 +65,31 @@ class FilmeSqliteOpenHelper(context: Context): SQLiteOpenHelper(context, "filmes
                         put("ator", ator)
                     })
                 }
+            }
+        }
+    }
+
+    fun buscarTodosFilmes(): List<Filme> {
+        readableDatabase.use { database ->
+            val listaFilmes = mutableListOf<Filme>()
+            database.rawQuery(
+                "select * from filme",
+                null
+            ).use {
+                while (it.moveToNext()) {
+                    val data = it.getIntOrNull(7)
+                    listaFilmes.add(Filme(
+                        id = it.getLong(0),
+                        titulo = it.getString(1),
+                        ano = it.getIntOrNull(2),
+                        diretor = it.getStringOrNull(3),
+                        notaImdb = it.getDoubleOrNull(4),
+                        notaUsuario = it.getDoubleOrNull(5),
+                        foiAssistido = it.getInt(6) == 1,
+                        dataAssistido = if (data != null) Date(data.toLong()) else null
+                    ))
+                }
+                return listaFilmes
             }
         }
     }
